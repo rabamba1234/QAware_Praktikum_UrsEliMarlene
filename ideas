@@ -1,0 +1,23 @@
+Quest:
+  Bildauschnittskorrektur mit mediapipe (von Webcam zu ?)
+
+  Einen belibigen Videofeed in ein beliebiges Format umwandeln, bei dem immer das Gesicht zu sehen ist.
+
+Schritte zum Ziel:
+  1. Konzept
+  2. JavaScript lernen
+  3. Bauteile suchen
+  4. zusammenschreiben
+
+Konzept:
+
+Was brauchen wir?:
+  - Video einlesen und ausgeben können
+  - Auschnitt eines Videos zeigen
+  - mediapipe einbinden
+  - uns mit html/JavaScript vertraut machen
+
+
+To-do Tag 1:
+  - Auschnitt von Video zeigen können
+  -JavaScript laufen lassen
