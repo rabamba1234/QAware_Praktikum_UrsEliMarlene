@@ -1,0 +1,62 @@
+<!--
+  This demo is pure javascript with all libraries externally fetched. No closure.
+-->
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils@0.1/camera_utils.js" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@mediapipe/face_detection@0.0/face_detection.js" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@mediapipe/drawing_utils@0.1/drawing_utils.js" crossorigin="anonymous"></script>
+
+
+</head>
+
+<body>
+  <div class="container">
+    <video class="input_video"></video>
+    <canvas class="output_canvas" width="1240px" height="930px"></canvas>
+  </div>
+</body>
+</html>
+
+<script type="module">
+
+// Our input frames will come from here.
+const videoElement = document.getElementsByClassName('input_video')[0];
+const canvasElement = document.getElementsByClassName('output_canvas')[0];
+const canvasCtx = canvasElement.getContext('2d');
+
+function onResults(results) {
+  canvasCtx.save();
+  canvasCtx.clearRect(0, 0, canvasElement.width, canvasElement.height);
+  canvasCtx.drawImage(
+      results.image, 500, 500, canvasElement.width+500, canvasElement.height+500);
+
+  if (results.detections.length > 0) {
+    drawRectangle(
+        canvasCtx, results.detections[0].boundingBox,
+        {color: 'blue', lineWidth: 4, fillColor: '#00000000'});
+    drawLandmarks(canvasCtx, results.detections[0].landmarks, {
+      color: 'red',
+      radius: 5,
+    });
+  }
+  canvasCtx.restore();
+}
+
+const faceDetection = new FaceDetection({locateFile: (file) => {
+  return `https://cdn.jsdelivr.net/npm/@mediapipe/face_detection@0.0/${file}`;
+}});
+faceDetection.onResults(onResults);
+
+// Instantiate a camera. We'll feed each frame we receive into the solution.
+const camera = new Camera(videoElement, {
+  onFrame: async () => {
+    await faceDetection.send({image: videoElement});
+  },
+  width: 1240,
+  height: 930
+});
+camera.start();
+</script>
