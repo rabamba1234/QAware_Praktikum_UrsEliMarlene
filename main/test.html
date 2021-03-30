@@ -15,7 +15,7 @@
 <body>
   <div class="container">
     <video class="input_video"></video>
-    <canvas class="output_canvas" width="620px" height="465px"></canvas>
+    <canvas class="output_canvas" width="640px" height="435px"></canvas>
   </div>
 </body>
 </html>
@@ -41,14 +41,12 @@ function onResults(results) {
 
 
   canvasCtx.save();
-  canvasCtx.clearRect(0, 0, canvasElement.width, canvasElement.height);
+  canvasCtx.clearRect(verschiebungX, verschiebungY, canvasElement.width, canvasElement.height);
 
 
   if (results.detections.length > 0) {
+    var bound = results.detections[0].boundingBox;
 
-      results.detections[0].boundingBox.height *= 1.5;
-      results.detections[0].boundingBox.yCenter -= 0.1;
-      results.detections[0].boundingBox.width = results.detections[0].boundingBox.height * 4 / 3;
       canvasCtx.drawImage(
           results.image, 0, 0, canvasElement.width, canvasElement.height);
     drawRectangle(
