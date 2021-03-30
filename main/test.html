@@ -15,25 +15,42 @@
 <body>
   <div class="container">
     <video class="input_video"></video>
-    <canvas class="output_canvas" width="1240px" height="930px"></canvas>
+    <canvas class="output_canvas" width="620px" height="465px"></canvas>
   </div>
 </body>
 </html>
 
 <script type="module">
 
+
+//results.detections[0].boundingBox.height
+//height, width, xCenter, yCenter, filling
+
 // Our input frames will come from here.
 const videoElement = document.getElementsByClassName('input_video')[0];
 const canvasElement = document.getElementsByClassName('output_canvas')[0];
 const canvasCtx = canvasElement.getContext('2d');
 
+
+var canvasxCenter = canvasElement.width / 2;
+var canvasyCenter = canvasElement.height / 2;
+
 function onResults(results) {
+  var verschiebungX = results.detections[0].boundingBox.xCenter - canvasxCenter;
+  var verschiebungY = results.detections[0].boundingBox.yCenter - canvasyCenter;
+
+
   canvasCtx.save();
   canvasCtx.clearRect(0, 0, canvasElement.width, canvasElement.height);
-  canvasCtx.drawImage(
-      results.image, 500, 500, canvasElement.width+500, canvasElement.height+500);
+
 
   if (results.detections.length > 0) {
+
+      results.detections[0].boundingBox.height *= 1.5;
+      results.detections[0].boundingBox.yCenter -= 0.1;
+      results.detections[0].boundingBox.width = results.detections[0].boundingBox.height * 4 / 3;
+      canvasCtx.drawImage(
+          results.image, 0, 0, canvasElement.width, canvasElement.height);
     drawRectangle(
         canvasCtx, results.detections[0].boundingBox,
         {color: 'blue', lineWidth: 4, fillColor: '#00000000'});
