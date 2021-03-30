@@ -13,65 +13,65 @@
 </head>
 
 <body>
-  <div class="container">
-    <video class="input_video"></video>
-    <canvas class="output_canvas" width="640px" height="435px"></canvas>
-  </div>
+<div class="container">
+  <video class="input_video"></video>
+  <canvas class="output_canvas" width="620px" height="465px"></canvas>
+</div>
 </body>
 </html>
 
 <script type="module">
 
 
-//results.detections[0].boundingBox.height
-//height, width, xCenter, yCenter, filling
+  //results.detections[0].boundingBox.height
+  //height, width, xCenter, yCenter, filling
 
-// Our input frames will come from here.
-const videoElement = document.getElementsByClassName('input_video')[0];
-const canvasElement = document.getElementsByClassName('output_canvas')[0];
-const canvasCtx = canvasElement.getContext('2d');
-
-
-var canvasxCenter = canvasElement.width / 2;
-var canvasyCenter = canvasElement.height / 2;
-
-function onResults(results) {
-  var verschiebungX = results.detections[0].boundingBox.xCenter - canvasxCenter;
-  var verschiebungY = results.detections[0].boundingBox.yCenter - canvasyCenter;
+  // Our input frames will come from here.
+  const videoElement = document.getElementsByClassName('input_video')[0];
+  const canvasElement = document.getElementsByClassName('output_canvas')[0];
+  const canvasCtx = canvasElement.getContext('2d');
 
 
-  canvasCtx.save();
-  canvasCtx.clearRect(verschiebungX, verschiebungY, canvasElement.width, canvasElement.height);
+  var canvasxCenter = canvasElement.width / 2;
+  var canvasyCenter = canvasElement.height / 2;
+
+  function onResults(results) {
+    var verschiebungX = canvasxCenter - results.detections[0].boundingBox.xCenter;
+    var verschiebungY = canvasyCenter - results.detections[0].boundingBox.yCenter;
 
 
-  if (results.detections.length > 0) {
-    var bound = results.detections[0].boundingBox;
+    canvasCtx.save();
+    canvasCtx.clearRect(0, 0, canvasElement.width, canvasElement.height);
 
+    if (results.detections.length > 0) {
+      results.detections[0].boundingBox.height *= 1.5;
+      results.detections[0].boundingBox.yCenter -= 0.5;
+      results.detections[0].boundingBox.width = results.detections[0].boundingBox.height * 4 / 3;
       canvasCtx.drawImage(
-          results.image, 0, 0, canvasElement.width, canvasElement.height);
-    drawRectangle(
-        canvasCtx, results.detections[0].boundingBox,
-        {color: 'blue', lineWidth: 4, fillColor: '#00000000'});
-    drawLandmarks(canvasCtx, results.detections[0].landmarks, {
-      color: 'red',
-      radius: 5,
-    });
+              results.image, results.detections[0].boundingBox.xCenter * canvasElement.width - (results.detections[0].boundingBox.width / 2), results.detections[0].boundingBox.yCenter * canvasElement.height - (results.detections[0].boundingBox.height / 2), 1240, 960, 0, 0, canvasElement.width, canvasElement.height);
+       drawRectangle(
+              canvasCtx, results.detections[0].boundingBox,
+              {color: 'blue', lineWidth: 4, fillColor: '#00000000'});
+      drawLandmarks(canvasCtx, results.detections[0].landmarks, {
+        color: 'red',
+        radius: 5,
+      });
+    }
+    canvasCtx.restore();
   }
-  canvasCtx.restore();
-}
 
-const faceDetection = new FaceDetection({locateFile: (file) => {
-  return `https://cdn.jsdelivr.net/npm/@mediapipe/face_detection@0.0/${file}`;
-}});
-faceDetection.onResults(onResults);
+  const faceDetection = new FaceDetection({locateFile: (file) => {
+      return `https://cdn.jsdelivr.net/npm/@mediapipe/face_detection@0.0/${file}`;
+    }});
+  faceDetection.onResults(onResults);
 
-// Instantiate a camera. We'll feed each frame we receive into the solution.
-const camera = new Camera(videoElement, {
-  onFrame: async () => {
-    await faceDetection.send({image: videoElement});
-  },
-  width: 1240,
-  height: 930
-});
-camera.start();
+  // Instantiate a camera. We'll feed each frame we receive into the solution.
+  const camera = new Camera(videoElement, {
+    onFrame: async () => {
+      await faceDetection.send({image: videoElement});
+    },
+    width: 1240,
+    height: 930
+  });
+  camera.start();
 </script>
