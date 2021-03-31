@@ -26,5 +26,5 @@ To-do Tag 2:
   - Video bewegen, so dass das Gesicht imer in der Mitte ist
 
 To-do Tag 3:
-  - mit transform() und scale() testen
+  - mit translate() und scale() testen
   - die Größe des Videos ändern, damit sie sich nicht automatisch anpasst
