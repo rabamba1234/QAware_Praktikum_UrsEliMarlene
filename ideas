@@ -17,7 +17,17 @@ Was brauchen wir?:
   - mediapipe einbinden
   - uns mit html/JavaScript vertraut machen
 
+Zoom vom Videoausschnitt:
+  - mit Hilfe von CSS das Bild abschneiden und nicht verkleinern
 
 To-do Tag 1:
   - Auschnitt von Video zeigen können
-  -JavaScript laufen lassen
+  - JavaScript laufen lassen
+  
+To-do Tag 2:
+  - Bild das Gesicht verfolgen lassen
+  
+To-do Tag 3:
+  - Idee mit CSS umsetzen
+  - Bild rotieren lassen
+  - Grenzwerte für Seiten setzen
