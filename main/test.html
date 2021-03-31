@@ -6,7 +6,7 @@
 <head>
   <meta charset="utf-8">
   <script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils@0.1/camera_utils.js" crossorigin="anonymous"></script>
-  <script src="https://cdn.jsdelivr.net/npm/@mediapipe/face_detection@0.0/face_detection.js" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@mediapipe/face_detection@0.0.1613083229/face_detection.js" crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/@mediapipe/drawing_utils@0.1/drawing_utils.js" crossorigin="anonymous"></script>
 
 
@@ -58,8 +58,10 @@
     canvasCtx.clearRect(0, 0, canvasElement.width, canvasElement.height);
 
     if (results.detections.length > 0) {
+      canvasCtx.translate(canvasElement.width / 2 - 580, canvasElement.height / 2 - 580);
+      canvasCtx.scale(3, 2);
       canvasCtx.drawImage(
-              results.image, newX, newY, canvasElement.width, canvasElement.height);
+              results.image, newX * 3, newY * 2, canvasElement.width, canvasElement.height);
 
 
       /*drawRectangle(
@@ -77,7 +79,7 @@
   }
 
   const faceDetection = new FaceDetection({locateFile: (file) => {
-      return `https://cdn.jsdelivr.net/npm/@mediapipe/face_detection@0.0/${file}`;
+      return `https://cdn.jsdelivr.net/npm/@mediapipe/face_detection@0.0.1613083229/${file}`;
     }});
   faceDetection.onResults(onResults);
 
