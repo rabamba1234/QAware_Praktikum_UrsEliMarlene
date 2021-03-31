@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="utf-8">
+    <title>Transformation Test</title>
+</head>
+
+<body>
+<p><img id="shrek" width="300" height="300" src="shrek.png" alt="shrek">
+<p><canvas id="canvas1" width="300px" height="300px"></canvas>
+<p><canvas id="canvas2" width="300px" height="300px"></canvas>
+<p><canvas id="canvas3" width="300px" height="300px"></canvas>
+<script>
+    window.onload = function() {
+        const scaleFactor = 1.5; // should be large enough to accommodate maximum translation
+        const image = document.getElementById('shrek');
+
+        // Example 1
+        {
+            const canvas = document.getElementById('canvas1');
+            const ctx = canvas.getContext('2d');
+            ctx.translate(canvas.width/2, canvas.height/2); // nose moved (0,0) from center position
+            ctx.scale(scaleFactor, scaleFactor);
+            ctx.drawImage(image, -canvas.width/2, -canvas.height/2, canvas.width, canvas.height);
+        }
+
+        // Example 2
+        {
+            const canvas = document.getElementById('canvas2');
+            const ctx = canvas.getContext('2d');
+            ctx.translate(canvas.width/2-50, canvas.height/2-50); // nose moved (-50,-50) from center position
+            ctx.scale(scaleFactor, scaleFactor);
+            ctx.drawImage(image, -canvas.width/2, -canvas.height/2, canvas.width, canvas.height);
+        }
+
+        // Example 3
+        {
+            const canvas = document.getElementById('canvas3');
+            const ctx = canvas.getContext('2d');
+            ctx.translate(canvas.width/2+50, canvas.height/2); // nose moved (50,0) from center position
+            ctx.scale(scaleFactor, scaleFactor);
+            ctx.drawImage(image, -canvas.width/2, -canvas.height/2, canvas.width, canvas.height);
+        }
+    }
+</script>
+</body>
+</html>
