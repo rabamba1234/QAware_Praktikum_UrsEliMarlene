@@ -22,7 +22,8 @@
 
 <script type="module">
 
-
+  var width = 376;
+  var height = 301;
   //results.detections[0].boundingBox.height
   //height, width, xCenter, yCenter, filling
 
@@ -35,29 +36,44 @@
   var canvasxCenter = canvasElement.width / 2;
   var canvasyCenter = canvasElement.height / 2;
 
+  var xCenterTemp;
+  var yCenterTemp;
+  // processing and visualizing the video input
   function onResults(results) {
-    var verschiebungX = canvasxCenter - results.detections[0].boundingBox.xCenter;
-    var verschiebungY = canvasyCenter - results.detections[0].boundingBox.yCenter;
+    var difx = Math.abs(xCenterTemp - results.detections[0].boundingBox.xCenter);
+    var dify = Math.abs(yCenterTemp - results.detections[0].boundingBox.yCenter);
+    //checking the intensity of movement
+    if (difx < 0.0025) {
+      results.detections[0].boundingBox.xCenter = xCenterTemp;
+    }
+    if (dify < 0.0025) {
+      results.detections[0].boundingBox.yCenter = yCenterTemp;
+    }
+    //calculating location of the face
+    var newX = canvasxCenter - results.detections[0].boundingBox.xCenter * canvasElement.width;
+    var newY = canvasyCenter - results.detections[0].boundingBox.yCenter * canvasElement.height;
 
 
     canvasCtx.save();
     canvasCtx.clearRect(0, 0, canvasElement.width, canvasElement.height);
 
     if (results.detections.length > 0) {
-      results.detections[0].boundingBox.height *= 1.5;
-      results.detections[0].boundingBox.yCenter -= 0.5;
-      results.detections[0].boundingBox.width = results.detections[0].boundingBox.height * 4 / 3;
       canvasCtx.drawImage(
-              results.image, results.detections[0].boundingBox.xCenter * canvasElement.width - (results.detections[0].boundingBox.width / 2), results.detections[0].boundingBox.yCenter * canvasElement.height - (results.detections[0].boundingBox.height / 2), 1240, 960, 0, 0, canvasElement.width, canvasElement.height);
-       drawRectangle(
+              results.image, newX, newY, canvasElement.width, canvasElement.height);
+
+
+      /*drawRectangle(
               canvasCtx, results.detections[0].boundingBox,
               {color: 'blue', lineWidth: 4, fillColor: '#00000000'});
       drawLandmarks(canvasCtx, results.detections[0].landmarks, {
         color: 'red',
         radius: 5,
-      });
+      });*/
     }
     canvasCtx.restore();
+    //saving coordinate values to compare movement
+    xCenterTemp = results.detections[0].boundingBox.xCenter;
+    yCenterTemp = results.detections[0].boundingBox.yCenter;
   }
 
   const faceDetection = new FaceDetection({locateFile: (file) => {
