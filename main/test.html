@@ -58,8 +58,8 @@
       results.detections[0].boundingBox.yCenter = yCenterTemp;
     }
     //calculating location of the face
-    var deltaX = (results.detections[0].boundingBox.xCenter - 0.5) * canvasElement.width;
-    var deltaY = (results.detections[0].boundingBox.yCenter - 0.5) * canvasElement.height;
+    var deltaX = (results.detections[0].boundingBox.xCenter - 0.5) * canvasElement.width * scale;
+    var deltaY = (results.detections[0].boundingBox.yCenter - 0.5) * canvasElement.height * scale;
 
 
     canvasCtx.save();
